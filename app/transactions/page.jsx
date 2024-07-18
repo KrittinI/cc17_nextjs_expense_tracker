@@ -1,15 +1,18 @@
-import CreateButton from "../_components/create-button"
-import Pagination from "../_components/pagination"
-import Search from "../_components/search"
+import CreateButton from "./_components/create-button"
+import Pagination from "./_components/pagination"
+import Search from "./_components/search"
 import TransactionList from "../_components/transaction-list"
-import { fetchTotalTransaction } from "../_lib/data"
+import { fetchSearchTransaction } from "../_lib/data"
+import { Suspense } from "react"
+import { TableSkeleton } from "../_components/skeleton"
 
 export const metadata = {
     title: "Transaction"
 }
 
 export default async function TransactionPage({ searchParams }) {
-    const totalTransactions = await fetchTotalTransaction()
+    const totalSerach = await fetchSearchTransaction(searchParams.title || '')
+
     return (
         <main className="w-full">
             <div className="flex w-full items-center justify-between">
@@ -19,10 +22,12 @@ export default async function TransactionPage({ searchParams }) {
                 <Search placeholder="Search transactions..." />
                 <CreateButton />
             </div>
-            <TransactionList page={Number(searchParams.page) || 1} title={searchParams.title} />
+            <Suspense fallback={<TableSkeleton />}>
+                <TransactionList page={Number(searchParams.page) || 1} title={searchParams.title} />
+            </Suspense>
             <div className="mt-5 flex w-full justify-center">
-                <Pagination totalPages={Math.ceil(totalTransactions / 5)} />
+                <Pagination totalPages={Math.ceil(totalSerach / 5)} />
             </div>
-        </main>
+        </main >
     )
 }

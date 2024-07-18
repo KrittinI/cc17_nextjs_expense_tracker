@@ -1,11 +1,11 @@
 import prisma from './prisma';
 
 export async function fetchTotalExpense() {
-  await new Promise(resolve => {
-    setTimeout(() => {
-      resolve();
-    }, 2000);
-  });
+  // await new Promise(resolve => {
+  //   setTimeout(() => {
+  //     resolve();
+  //   }, 2000);
+  // });
 
   const result =
     await prisma.$queryRaw`SELECT SUM(amount) AS totalExpense FROM transactions`;
@@ -48,6 +48,11 @@ export async function fecthLatestTransaction() {
 }
 
 export async function fetchTransaction(page, title) {
+  // await new Promise(resolve => {
+  //   setTimeout(() => {
+  //     resolve();
+  //   }, 2000);
+  // });
   return prisma.transaction.findMany({
     where: {
       OR: [
@@ -57,6 +62,22 @@ export async function fetchTransaction(page, title) {
     },
     skip: (page - 1) * 5,
     take: 5,
-    include: { category: true }
+    include: { category: true },
+    orderBy: { date: 'desc' },
   })
+}
+
+export async function fetchSearchTransaction(title) {
+  return prisma.transaction.count({
+    where: {
+      OR: [
+        { description: { contains: title }, },
+        { category: { name: { contains: title } } }
+      ]
+    },
+  })
+}
+
+export async function fetchAllCategory() {
+  return prisma.category.findMany()
 }

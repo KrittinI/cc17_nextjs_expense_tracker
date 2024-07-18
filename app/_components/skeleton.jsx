@@ -66,25 +66,6 @@ export function SummaryCardsSkeleton() {
     );
 }
 
-export default function DashboardSkeleton() {
-    return (
-        <>
-            <div
-                className={`${shimmer} relative mb-4 h-8 w-36 overflow-hidden rounded-md bg-gray-100`}
-            />
-            <div className="grid gap-6 grid-cols-4">
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-            </div>
-            <div className="mt-6 pb-12">
-                <TransactionsSkeleton />
-            </div>
-        </>
-    );
-}
-
 export function TableRowSkeleton() {
     return (
         <tr className="w-full border-b py-3 border-gray-100 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg">

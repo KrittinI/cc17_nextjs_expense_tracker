@@ -1,14 +1,13 @@
 import { fetchTransaction } from "../_lib/data";
-import DeleteButton from "./delete-button";
-import UpdateButton from "./update-button";
+import { formatCurrency, formatDate, getCategoryImageMaping } from "../_lib/utils";
+import DeleteButton from "../transactions/_components/delete-button";
+import UpdateButton from "../transactions/_components/update-button";
 
-export default async function TransactionList({ page = 1, title }) {
+const categoryMapping = getCategoryImageMaping()
+
+export default async function TransactionList({ page, title }) {
     const transactions = await fetchTransaction(page, title)
-    let options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    };
+
     return (
         <div className="mt-6 flow-root">
             <div className="inline-block min-w-full align-middle">
@@ -42,7 +41,7 @@ export default async function TransactionList({ page = 1, title }) {
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                         <div className="flex items-center gap-3">
                                             <img
-                                                src={`/${transaction.category.name}.png`}
+                                                src={categoryMapping.get(transaction.category.name)}
                                                 className="rounded-full"
                                                 alt="category"
                                             />
@@ -50,19 +49,19 @@ export default async function TransactionList({ page = 1, title }) {
                                         </div>
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
-                                        {new Intl.DateTimeFormat("en-US", options).format(transaction.date)}
+                                        {formatDate(transaction.date)}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
                                         {transaction.description}
                                     </td>
                                     <td className="whitespace-nowrap px-3 py-3">
-                                        {new Intl.NumberFormat("en-US", { minimumFractionDigits: 2 }).format(transaction.amount / 100)}
+                                        {formatCurrency(transaction.amount / 100)}
                                     </td>
 
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
-                                            <UpdateButton />
-                                            <DeleteButton />
+                                            <UpdateButton id={transaction.id} />
+                                            <DeleteButton id={transaction.id} />
                                         </div>
                                     </td>
                                 </tr>

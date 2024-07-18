@@ -1,4 +1,4 @@
-import CreateForm from "@/app/_components/create-form";
+import CreateForm from "../_components/create-form";
 
 export const metadata = {
     title: "Create Transaction"

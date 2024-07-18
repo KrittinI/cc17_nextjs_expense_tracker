@@ -1,13 +1,11 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { fecthLatestTransaction } from '../_lib/data';
 import Image from 'next/image';
+import { formatCurrency, formatDate, getCategoryImageMaping } from '../_lib/utils';
+
+const categoryMapping = getCategoryImageMaping()
 
 export default async function LatestTransaction() {
-    let options = {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-    };
     const transactions = await fecthLatestTransaction()
     return (
         <div className="flex w-full flex-col">
@@ -18,7 +16,7 @@ export default async function LatestTransaction() {
                         <div className="flex flex-row items-center justify-between py-4">
                             <div className="flex items-center">
                                 <Image
-                                    src={`/${transaction.category.name}.png`}
+                                    src={categoryMapping.get(transaction.category.name)}
                                     alt=""
                                     className="mr-4 rounded-full"
                                     width={32}
@@ -26,12 +24,12 @@ export default async function LatestTransaction() {
                                 <div className="min-w-0">
                                     <p className="truncate font-semibold">{transaction.category.name}</p>
                                     <p className="text-sm text-gray-500">
-                                        {new Intl.DateTimeFormat("en-US", options).format(transaction.date)}
+                                        {formatDate(transaction.date)}
                                     </p>
                                 </div>
                             </div>
                             <p className="truncate font-medium">
-                                {new Intl.NumberFormat("en-US", { minimumFractionDigits: 2 }).format(transaction.amount / 100)}
+                                {formatCurrency(transaction.amount / 100)}
                             </p>
                         </div>
                     </div>
